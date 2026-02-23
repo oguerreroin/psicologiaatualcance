@@ -1,0 +1,166 @@
+name: Deploy Maestro (Aprovisionamiento y Despliegue)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: ⚙️ Auto-Instalar Dependencias y Desplegar
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.VPS_IP }}
+        username: ${{ secrets.VPS_USER }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        port: 22
+        script_stop: true
+        script: |
+          echo "================================================="
+          echo "🚀 FASE 1: VERIFICACIÓN E INSTALACIÓN DE SOFTWARE"
+          echo "================================================="
+          
+          # Actualizar repositorios silenciosamente
+          export DEBIAN_FRONTEND=noninteractive
+          sudo apt-get update -qq
+          
+          # Verificar Java 17
+          if ! command -v java &> /dev/null; then
+              echo "⏳ Instalando Java JDK 17..."
+              sudo apt-get install default-jdk -y -qq
+          else
+              echo "✅ Java ya está instalado."
+          fi
+          
+          # Verificar Maven
+          if ! command -v mvn &> /dev/null; then
+              echo "⏳ Instalando Maven..."
+              sudo apt-get install maven -y -qq
+          else
+              echo "✅ Maven ya está instalado."
+          fi
+          
+          # Verificar Node.js (v20)
+          if ! command -v node &> /dev/null; then
+              echo "⏳ Instalando Node.js..."
+              curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+              sudo apt-get install -y nodejs -qq
+          else
+              echo "✅ Node.js ya está instalado."
+          fi
+          
+          # Verificar Nginx
+          if ! command -v nginx &> /dev/null; then
+              echo "⏳ Instalando Nginx..."
+              sudo apt-get install nginx -y -qq
+          else
+              echo "✅ Nginx ya está instalado."
+          fi
+
+          # Verificar MySQL
+          if ! command -v mysql &> /dev/null; then
+              echo "⏳ Instalando MySQL..."
+              sudo apt-get install mysql-server -y -qq
+          else
+              echo "✅ MySQL ya está instalado."
+          fi
+
+          # Configurar Base de Datos DB_PSICOLOGIA automáticamente
+          echo "⏳ Configurando acceso a Base de Datos..."
+          sudo mysql -e "CREATE DATABASE IF NOT EXISTS db_psicologia;"
+          sudo mysql -e "CREATE USER IF NOT EXISTS 'root'@'localhost' IDENTIFIED BY 'Os98645763';"
+          sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'Os98645763';"
+          sudo mysql -e "GRANT ALL PRIVILEGES ON db_psicologia.* TO 'root'@'localhost';"
+          sudo mysql -e "FLUSH PRIVILEGES;"
+          
+          # Verificar Tomcat 10
+          if [ ! -d "/opt/tomcat/bin" ]; then
+              echo "⏳ Instalando Tomcat 10..."
+              cd /tmp
+              wget -q https://downloads.apache.org/tomcat/tomcat-10/v10.1.34/bin/apache-tomcat-10.1.34.tar.gz
+              sudo mkdir -p /opt/tomcat
+              sudo tar xzf apache-tomcat-10.1.34.tar.gz -C /opt/tomcat --strip-components=1
+              sudo chmod +x /opt/tomcat/bin/*.sh
+              echo "✅ Tomcat Instalado."
+          else
+              echo "✅ Tomcat ya está instalado."
+          fi
+
+          # Arrancar Tomcat si está apagado
+          if ! pgrep -f "tomcat" > /dev/null; then
+             sudo /opt/tomcat/bin/startup.sh
+             echo "✅ Tomcat Iniciado."
+          fi
+
+          echo "================================================="
+          echo "📥 FASE 2: DESCARGA DE CÓDIGO FUENTE"
+          echo "================================================="
+          
+          if [ ! -d "$HOME/psicologia-a-tu-alcance" ]; then
+              echo "Clonando repositorio por primera vez..."
+              git clone https://github.com/oguerreroin/psicologiaatualcance $HOME/psicologia-a-tu-alcance
+          fi
+          
+          cd $HOME/psicologia-a-tu-alcance
+          git pull origin main
+          
+          echo "================================================="
+          echo "☕ FASE 3: COMPILACIÓN DEL BACKEND (JAVA/MAVEN)"
+          echo "================================================="
+          
+          mvn clean package
+          echo "Desplegando WAR en Tomcat..."
+          sudo cp target/psicologia-a-tu-alcance-1.0-SNAPSHOT.war /opt/tomcat/webapps/psicologia-a-tu-alcance.war
+          
+          echo "================================================="
+          echo "⚛️ FASE 4: COMPILACIÓN DEL FRONTEND (REACT/VITE)"
+          echo "================================================="
+          
+          cd frontend
+          # Sobreescribir el endpoint con el puerto que Nginx expondrá para el VPS local
+          echo "VITE_API_BASE_URL=/psicologia-a-tu-alcance/api" > .env.production
+          
+          npm install
+          npm run build
+          
+          echo "Moviendo build de React al directorio público..."
+          sudo mkdir -p /var/www/psicologia
+          sudo rm -rf /var/www/psicologia/*
+          sudo cp -r dist/* /var/www/psicologia/
+          sudo chown -R www-data:www-data /var/www/psicologia
+          
+          echo "================================================="
+          echo "🕸️ FASE 5: CONFIGURACIÓN DE NGINX ROUTING"
+          echo "================================================="
+          
+          if [ ! -f "/etc/nginx/sites-available/psicologia" ]; then
+              echo "Creando registro Reverse Proxy para despliegue unificado..."
+              sudo bash -c 'cat > /etc/nginx/sites-available/psicologia <<EOF
+          server {
+              listen 80;
+              server_name _;
+              root /var/www/psicologia;
+              index index.html;
+              location / {
+                  try_files \$uri \$uri/ /index.html;
+              }
+              location /psicologia-a-tu-alcance/ {
+                  proxy_pass http://localhost:8080/psicologia-a-tu-alcance/;
+                  proxy_set_header Host \$host;
+                  proxy_set_header X-Real-IP \$remote_addr;
+                  proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+              }
+          }
+          EOF'
+              sudo ln -sf /etc/nginx/sites-available/psicologia /etc/nginx/sites-enabled/
+              sudo rm -f /etc/nginx/sites-enabled/default
+          fi
+          
+          sudo systemctl restart nginx
+          echo "================================================="
+          echo "🎉 DESPLIEGUE CONTINUO Y APROVISIONAMIENTO LISTOS!"
+          echo "Tu sistema web está compilado al 100% en tu servidor."
+          echo "================================================="
