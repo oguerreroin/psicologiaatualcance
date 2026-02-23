@@ -1,0 +1,32 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+    xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui" template="/template.xhtml">
+
+    <ui:define name="title">Login - Psicología a tu Alcance</ui:define>
+
+    <ui:define name="content">
+        <div class="flex justify-content-center align-items-center" style="height: 60vh;">
+            <p:card style="width: 25rem; margin-bottom: 2em">
+                <f:facet name="title">Iniciar Sesión</f:facet>
+
+                <h:form>
+                    <div class="field">
+                        <p:outputLabel for="email" value="Correo Electrónico" />
+                        <p:inputText id="email" value="#{authBean.email}" required="true" style="width:100%" />
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="password" value="Contraseña" />
+                        <p:password id="password" value="#{authBean.password}" required="true" toggleMask="true"
+                            style="width:100%" />
+                    </div>
+
+                    <p:commandButton value="Ingresar" action="#{authBean.login}" styleClass="w-full" update="@form" />
+
+                    <div class="mt-3 text-center">
+                        <p:link outcome="registro" value="¿No tienes cuenta? Regístrate aquí" />
+                    </div>
+                </h:form>
+            </p:card>
+        </div>
+    </ui:define>
+
+</ui:composition>

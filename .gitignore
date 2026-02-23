@@ -1,0 +1,26 @@
+# Directorios de compilación de Maven
+target/
+*.war
+
+# Directorios de compilación y dependencias de Node.js (Frontend)
+frontend/node_modules/
+frontend/dist/
+
+# Archivos y directorios de configuración de IDEs
+.vscode/
+.idea/
+*.iml
+.project
+.classpath
+
+# Logs
+*.log
+e2e_results.txt
+e2e_out.log
+jwt.txt
+users_dump.json
+test_integration.ps1
+
+# Variables de entorno locales
+frontend/.env.local
+frontend/.env.development

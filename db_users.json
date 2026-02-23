@@ -1,0 +1,80 @@
+[
+  {
+    "password": "123456",
+    "id": "1",
+    "email": "admin@psico.com",
+    "rol": "ADMIN"
+  },
+  {
+    "password": "123456",
+    "id": "2",
+    "email": "juan@mail.com",
+    "rol": "PACIENTE"
+  },
+  {
+    "password": "123456",
+    "id": "3",
+    "email": "ana@psico.com",
+    "rol": "PSICOLOGO"
+  },
+  {
+    "password": "123456",
+    "id": "4",
+    "email": "carlos@psico.com",
+    "rol": "PSICOLOGO"
+  },
+  {
+    "password": "123456",
+    "id": "5",
+    "email": "oscar@mail.com",
+    "rol": "PACIENTE"
+  },
+  {
+    "password": "123456",
+    "id": "6",
+    "email": "halegria@gmal.com",
+    "rol": "PACIENTE"
+  },
+  {
+    "password": "123456",
+    "id": "7",
+    "email": "axel@admin.com",
+    "rol": "PACIENTE"
+  },
+  {
+    "password": "123456",
+    "id": "8",
+    "email": "melquiades@utp.edu.pe",
+    "rol": "PACIENTE"
+  },
+  {
+    "password": "123456",
+    "id": "11",
+    "email": "paciente@psico.com",
+    "rol": "PACIENTE"
+  },
+  {
+    "password": "123456",
+    "id": "13",
+    "email": "roberto@psico.com",
+    "rol": "PSICOLOGO"
+  },
+  {
+    "password": "123456",
+    "id": "14",
+    "email": "maria@psico.com",
+    "rol": "PSICOLOGO"
+  },
+  {
+    "password": "123456",
+    "id": "17",
+    "email": "paciente1@psico.com",
+    "rol": "PACIENTE"
+  },
+  {
+    "password": "123456",
+    "id": "18",
+    "email": "psicologo1@psico.com",
+    "rol": "PSICOLOGO"
+  }
+]

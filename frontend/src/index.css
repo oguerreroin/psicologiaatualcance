@@ -1,0 +1,25 @@
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/inter/700.css';
+@import 'tailwindcss';
+
+@theme {
+   --color-primary: #4A90E2;       /* Azul profesional principal */
+   --color-primary-hover: #3b76bb;
+   --color-bg-soft: #F4F8FB;       /* Azul suave fondo */
+   --color-mint: #A8D5BA;          /* Verde menta suave */
+   --color-dark-text: #2E2E2E;     /* Gris texto principal */
+   --color-light-text: #6B7280;    /* Gris secundario */
+   --radius-sm: 0.5rem;
+   --radius-md: 0.75rem;           /* 12px estándar por requerimiento */
+   --radius-lg: 1rem;
+   --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+body {
+  background-color: var(--color-bg-soft);
+  color: var(--color-dark-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}

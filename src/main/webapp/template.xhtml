@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+    xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>
+        <ui:insert name="title">Psicología a tu Alcance</ui:insert>
+    </title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <h:outputStylesheet library="webjars" name="primeflex/3.3.1/primeflex.min.css" />
+    <style>
+        body {
+            background-color: #f4f4f4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .header {
+            background-color: #007ad9;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .content {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #ddd;
+            margin-top: 2rem;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <div class="header">
+        <h1>Psicología a tu Alcance</h1>
+        <h:form rendered="#{authBean.loggedIn}">
+            <span style="margin-right: 1rem;">Hola, #{authBean.usuario.nombre}</span>
+            <p:commandButton value="Cerrar Sesión" action="#{authBean.logout}" icon="pi pi-sign-out"
+                styleClass="ui-button-secondary ui-button-sm" />
+        </h:form>
+    </div>
+
+    <div class="content">
+        <p:messages id="messages" showDetail="true" closable="true">
+            <p:autoUpdate />
+        </p:messages>
+        <ui:insert name="content">Contenido por defecto</ui:insert>
+    </div>
+
+    <div class="footer">
+        <p>&#169; 2025 Psicología a tu Alcance - Proyecto Final</p>
+    </div>
+</h:body>
+
+</html>

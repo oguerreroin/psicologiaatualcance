@@ -1,0 +1,101 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+    xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui" template="/template.xhtml">
+
+    <ui:define name="title">Reservar Cita - Psicología a tu Alcance</ui:define>
+
+    <ui:define name="content">
+        <div class="flex justify-content-center">
+            <p:card style="width: 40rem">
+                <f:facet name="title">Nueva Cita</f:facet>
+
+                <h:form id="formReserva">
+                    <div class="field">
+                        <p:outputLabel for="psicologo" value="Seleccione Psicólogo" />
+                        <p:selectOneMenu id="psicologo" value="#{citaBean.selectedPsicologoId}" style="width:100%"
+                            required="true" filter="true" filterMatchMode="contains">
+                            <f:selectItem itemLabel="Seleccione..." itemValue="" />
+                            <f:selectItems value="#{citaBean.psicologos}" var="psico"
+                                itemLabel="#{psico.nombre} - #{psico.especialidad}" itemValue="#{psico.id}" />
+                        </p:selectOneMenu>
+                    </div>
+
+                    <div class="field">
+                        <p:outputLabel for="edad" value="Edad del Paciente" />
+                        <p:spinner id="edad" value="#{citaBean.edadPaciente}" min="1" max="120" required="true"
+                            styleClass="w-full" />
+                    </div>
+
+                    <div class="field">
+                        <p:outputLabel for="motivo" value="Motivo de la consulta" />
+                        <p:inputTextarea id="motivo" value="#{citaBean.motivo}" rows="3" styleClass="w-full"
+                            required="true" placeholder="Describa brevemente el problema..." />
+                    </div>
+
+                    <div class="field">
+                        <p:outputLabel value="Tipo de Pago" />
+                        <p:selectOneRadio id="tipoPago" value="#{citaBean.tipoPago}" layout="responsive" columns="2"
+                            required="true">
+                            <f:selectItem itemLabel="Online (10% Descuento)" itemValue="ONLINE" />
+                            <f:selectItem itemLabel="Presencial" itemValue="PRESENCIAL" />
+                            <p:ajax event="valueChange" listener="#{citaBean.verificarPago}"
+                                update=":formReserva:btnConfirmar" />
+                            <p:ajax event="change" oncomplete="if(this.value === 'ONLINE') PF('dlgPago').show()" />
+                        </p:selectOneRadio>
+                    </div>
+
+                    <div class="field">
+                        <p:outputLabel for="fecha" value="Fecha y Hora" />
+                        <p:datePicker id="fecha" value="#{citaBean.fechaCita}" showTime="true" stepMinute="60"
+                            required="true" showIcon="true" mindate="#{citaBean.minDate}" />
+                    </div>
+
+                    <p:commandButton id="btnConfirmar" value="Confirmar Reserva" action="#{citaBean.reservarCita}"
+                        update="@form" styleClass="w-full"
+                        disabled="#{citaBean.tipoPago eq 'ONLINE' and not citaBean.pagoRealizado}" />
+
+                    <div class="mt-3">
+                        <p:button value="Volver al Dashboard" outcome="dashboard"
+                            styleClass="ui-button-secondary w-full" />
+                    </div>
+                </h:form>
+            </p:card>
+        </div>
+
+        <p:dialog header="Simulación de Pago" widgetVar="dlgPago" minHeight="40" width="400" showEffect="fade"
+            modal="true" closable="false">
+            <h:form id="formPago">
+                <div class="flex flex-column gap-3">
+                    <p>Monto a pagar: <strong>S/ 50.00</strong> (con descuento)</p>
+                    <div class="field">
+                        <p:outputLabel value="Número de Tarjeta" />
+                        <p:inputText styleClass="w-full" placeholder="4557 8888 9999 0000" />
+                    </div>
+                    <div class="formgrid grid">
+                        <div class="field col">
+                            <p:inputText placeholder="MM/YY" styleClass="w-full" />
+                        </div>
+                        <div class="field col">
+                            <p:inputText placeholder="CVC" styleClass="w-full" />
+                        </div>
+                    </div>
+                    <p:commandButton value="Pagar Ahora" action="#{citaBean.simularPago}"
+                        oncomplete="PF('dlgPago').hide();" update=":formReserva:btnConfirmar"
+                        styleClass="w-full ui-button-success" />
+                    <p:commandButton value="Cancelar" onclick="PF('dlgPago').hide()" type="button"
+                        styleClass="w-full ui-button-secondary ui-button-flat mt-2" />
+                </div>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog header="Confirmación" widgetVar="dlgConfirm" minHeight="40" width="350" showEffect="fade"
+            modal="true">
+            <p class="m-0">
+                ¡Su reserva ha sido enviada exitosamente!
+            </p>
+            <f:facet name="footer">
+                <p:button value="Aceptar" outcome="dashboard" styleClass="ui-button-flat mr-2" style="width: 6rem" />
+            </f:facet>
+        </p:dialog>
+    </ui:define>
+
+</ui:composition>

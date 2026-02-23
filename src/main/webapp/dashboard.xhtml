@@ -1,0 +1,55 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+    xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui" template="/template.xhtml">
+
+    <ui:define name="title">Dashboard - Psicología a tu Alcance</ui:define>
+
+    <ui:define name="content">
+        <div class="grid">
+            <div class="col-12">
+                <h2>Bienvenido, #{authBean.usuario.nombre}</h2>
+                <p:tag value="#{authBean.usuario.rol}" severity="info" />
+            </div>
+
+            <div class="col-12 md:col-6" rendered="#{authBean.usuario.rol eq 'PACIENTE'}">
+                <p:card>
+                    <f:facet name="title">Reservar Nueva Cita</f:facet>
+                    <p>Encuentra al especialista adecuado para ti.</p>
+                    <p:button value="Reservar Ahora" outcome="reserva_cita" icon="pi pi-calendar-plus" />
+                </p:card>
+            </div>
+
+            <div class="col-12">
+                <p:card>
+                    <f:facet name="title">Mis Citas</f:facet>
+                    <p:dataTable value="#{citaBean.misCitas}" var="cita" emptyMessage="No tienes citas programadas.">
+                        <p:column headerText="Fecha">
+                            <h:outputText value="#{cita.fecha}">
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="#{authBean.usuario.rol eq 'PACIENTE' ? 'Psicólogo' : 'Paciente'}">
+                            <h:outputText
+                                value="#{authBean.usuario.rol eq 'PACIENTE' ? cita.nombrePsicologo : cita.nombrePaciente}" />
+                        </p:column>
+
+                        <p:column headerText="Estado">
+                            <p:tag value="#{cita.estado}"
+                                severity="#{cita.estado eq 'CONFIRMADA' ? 'success' : (cita.estado eq 'ATENDIDO' ? 'info' : (cita.estado eq 'CANCELADA' ? 'danger' : 'warning'))}" />
+                        </p:column>
+
+                        <p:column headerText="Pago">
+                            <p:tag value="#{cita.estadoPago}"
+                                severity="#{cita.estadoPago eq 'PAGADO' ? 'success' : 'warning'}" />
+                        </p:column>
+
+                        <p:column headerText="Monto">
+                            <h:outputText value="#{cita.tipoPago eq 'ONLINE' ? '$90.00 (10% OFF)' : '$100.00'}" />
+                        </p:column>
+                    </p:dataTable>
+                </p:card>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,71 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+    xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui" template="/template.xhtml">
+
+    <ui:define name="title">Dashboard Psicólogo - Psicología a tu Alcance</ui:define>
+
+    <ui:define name="content">
+        <div class="grid">
+            <div class="col-12">
+                <h2>Panel de Control - Dr. #{authBean.usuario.nombre}</h2>
+                <p:tag value="#{authBean.usuario.rol}" severity="info" />
+            </div>
+
+            <div class="col-12">
+                <p:card>
+                    <f:facet name="title">Gestión de Citas</f:facet>
+                    <h:form id="formCitas">
+                        <p:dataTable value="#{psicologoBean.citas}" var="cita" emptyMessage="No tienes citas asignadas."
+                            paginator="true" rows="10">
+
+                            <p:column headerText="Fecha">
+                                <h:outputText value="#{cita.fecha}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column headerText="Paciente">
+                                <h:outputText value="#{cita.nombrePaciente}" />
+                            </p:column>
+
+                            <p:column headerText="Edad">
+                                <h:outputText value="#{cita.edadPaciente} años" />
+                            </p:column>
+
+                            <p:column headerText="Motivo">
+                                <h:outputText value="#{cita.motivo}" />
+                            </p:column>
+
+                            <p:column headerText="Estado Cita">
+                                <p:tag value="#{cita.estado}"
+                                    severity="#{cita.estado eq 'ATENDIDO' ? 'success' : (cita.estado eq 'CANCELADA' ? 'danger' : (cita.estado eq 'REPROGRAMADO' ? 'warning' : 'info'))}" />
+                            </p:column>
+
+                            <p:column headerText="Estado Pago">
+                                <p:tag value="#{cita.estadoPago}"
+                                    severity="#{cita.estadoPago eq 'PAGADO' ? 'success' : 'warning'}" />
+                                <br />
+                                <small>#{cita.tipoPago}</small>
+                            </p:column>
+
+                            <p:column headerText="Acciones">
+                                <p:commandButton icon="pi pi-check" styleClass="rounded-button ui-button-success mr-2"
+                                    action="#{psicologoBean.atenderCita(cita)}" update="@form" title="Atender"
+                                    rendered="#{cita.estado ne 'ATENDIDO' and cita.estado ne 'CANCELADA'}" />
+
+                                <p:commandButton icon="pi pi-calendar"
+                                    styleClass="rounded-button ui-button-warning mr-2"
+                                    action="#{psicologoBean.reprogramarCita(cita)}" update="@form" title="Reprogramar"
+                                    rendered="#{cita.estado ne 'ATENDIDO' and cita.estado ne 'CANCELADA'}" />
+
+                                <p:commandButton icon="pi pi-times" styleClass="rounded-button ui-button-danger"
+                                    action="#{psicologoBean.cancelarCita(cita)}" update="@form" title="Cancelar"
+                                    rendered="#{cita.estado ne 'ATENDIDO' and cita.estado ne 'CANCELADA'}" />
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </p:card>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>

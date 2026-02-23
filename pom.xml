@@ -1,0 +1,135 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.psico</groupId>
+  <artifactId>psicologia-a-tu-alcance</artifactId>
+  <packaging>war</packaging>
+  <version>1.0-SNAPSHOT</version>
+  <name>psicologia-a-tu-alcance Maven Webapp</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+  </properties>
+
+  <dependencies>
+    <!-- Jakarta EE API -->
+    <dependency>
+        <groupId>jakarta.platform</groupId>
+        <artifactId>jakarta.jakartaee-api</artifactId>
+        <version>10.0.0</version>
+        <scope>provided</scope>
+    </dependency>
+
+    <!-- MySQL Connector -->
+    <dependency>
+        <groupId>com.mysql</groupId>
+        <artifactId>mysql-connector-j</artifactId>
+        <version>8.2.0</version>
+    </dependency>
+
+    <!-- PrimeFaces -->
+    <dependency>
+        <groupId>org.primefaces</groupId>
+        <artifactId>primefaces</artifactId>
+        <version>13.0.0</version>
+        <classifier>jakarta</classifier>
+    </dependency>
+    <dependency>
+        <groupId>org.webjars.npm</groupId>
+        <artifactId>primeflex</artifactId>
+        <version>3.3.1</version>
+    </dependency>
+
+
+    <!-- Gson for JSON -->
+    <dependency>
+        <groupId>com.google.code.gson</groupId>
+        <artifactId>gson</artifactId>
+        <version>2.10.1</version>
+    </dependency>
+
+    <!-- JJWT for real JWT token handling -->
+    <dependency>
+        <groupId>io.jsonwebtoken</groupId>
+        <artifactId>jjwt-api</artifactId>
+        <version>0.11.5</version>
+    </dependency>
+    <dependency>
+        <groupId>io.jsonwebtoken</groupId>
+        <artifactId>jjwt-impl</artifactId>
+        <version>0.11.5</version>
+        <scope>runtime</scope>
+    </dependency>
+    <dependency>
+        <groupId>io.jsonwebtoken</groupId>
+        <artifactId>jjwt-gson</artifactId>
+        <version>0.11.5</version>
+        <scope>runtime</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.glassfish</groupId>
+        <artifactId>jakarta.faces</artifactId>
+        <version>4.0.0</version>
+    </dependency>
+    <!-- CDI Implementation -->
+    <dependency>
+        <groupId>org.jboss.weld.servlet</groupId>
+        <artifactId>weld-servlet-core</artifactId>
+        <version>5.1.2.Final</version>
+    </dependency>
+    <dependency>
+        <groupId>jakarta.inject</groupId>
+        <artifactId>jakarta.inject-api</artifactId>
+        <version>2.0.1</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>psicologia-a-tu-alcance</finalName>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.11.0</version>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-war-plugin</artifactId>
+            <version>3.4.0</version>
+        </plugin>
+        <plugin>
+            <groupId>org.codehaus.cargo</groupId>
+            <artifactId>cargo-maven3-plugin</artifactId>
+            <version>1.10.13</version>
+            <configuration>
+                <container>
+                    <containerId>tomcat10x</containerId>
+                    <type>installed</type>
+                    <zipUrlInstaller>
+                        <url>https://repo.maven.apache.org/maven2/org/apache/tomcat/tomcat/10.1.13/tomcat-10.1.13.zip</url>
+                    </zipUrlInstaller>
+                </container>
+                <configuration>
+                    <type>standalone</type>
+                    <properties>
+                        <cargo.servlet.port>8080</cargo.servlet.port>
+                    </properties>
+                </configuration>
+                <deployables>
+                    <deployable>
+                        <groupId>com.psico</groupId>
+                        <artifactId>psicologia-a-tu-alcance</artifactId>
+                        <type>war</type>
+                        <properties>
+                            <context>psicologia-a-tu-alcance</context>
+                        </properties>
+                    </deployable>
+                </deployables>
+            </configuration>
+        </plugin>
+    </plugins>
+  </build>
+</project>

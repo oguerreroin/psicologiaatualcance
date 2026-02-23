@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psicología a tu Alcance</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #F0F8FF;
+            /* Celeste muy pálido */
+            --color-white: #FFFFFF;
+            --color-primary: #00BFFF;
+            /* Celeste vibrante */
+            --color-primary-hover: #039BE5;
+            --color-text: #333333;
+            /* Gris oscuro */
+            --color-text-light: #555555;
+            --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 8px 30px rgba(0, 191, 255, 0.15);
+            --radius: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--color-text);
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.3s ease;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: sticky;
+            top: 0;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+        }
+
+        .logo {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--color-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-primary);
+        }
+
+        .btn-nav {
+            background-color: var(--color-primary);
+            color: white !important;
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-nav:hover {
+            background-color: var(--color-primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 191, 255, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 8rem 5% 6rem;
+            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: var(--color-text);
+        }
+
+        .hero h1 span {
+            color: var(--color-primary);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--color-text-light);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+        }
+
+        .btn-cta {
+            display: inline-block;
+            background-color: var(--color-primary);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-cta:hover {
+            background-color: var(--color-primary-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 191, 255, 0.4);
+        }
+
+        /* Sections General */
+        section {
+            padding: 6rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-title p {
+            color: var(--color-text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .card {
+            background: var(--color-white);
+            padding: 2.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 191, 255, 0.05);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+            border-color: rgba(0, 191, 255, 0.2);
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--color-primary);
+        }
+
+        .card p {
+            color: var(--color-text-light);
+        }
+
+        /* Why Choose Us */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .benefit-item {
+            background: var(--color-white);
+            padding: 2rem;
+            border-radius: var(--radius);
+            text-align: center;
+        }
+
+        .benefit-item h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--color-primary);
+        }
+
+        /* Team Section Placeholder */
+        .team-placeholder {
+            height: 300px;
+            background-color: #E0F2FE;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-primary);
+            font-weight: 600;
+            border: 2px dashed var(--color-primary);
+        }
+
+        /* Footer */
+        footer {
+            background-color: #F8FAFC;
+            padding: 4rem 5% 2rem;
+            border-top: 1px solid #E2E8F0;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto 3rem;
+        }
+
+        .footer-col h4 {
+            margin-bottom: 1.5rem;
+            color: var(--color-primary);
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-col ul li a:hover {
+            color: var(--color-primary);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #E2E8F0;
+            color: #94A3B8;
+            font-size: 0.9rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.25rem;
+            }
+
+            .nav-links {
+                display: none;
+                /* Simple hide for this static version, ideally a hamburger menu */
+            }
+
+            .navbar {
+                justify-content: center;
+            }
+
+            .logo {
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <nav class="navbar">
+        <div class="logo">
+            Psicología a tu Alcance
+        </div>
+        <div class="nav-links">
+            <a href="#inicio">Inicio</a>
+            <a href="#servicios">Servicios</a>
+            <a href="#nosotros">Nosotros</a>
+            <a href="http://localhost:8080/psicologia-a-tu-alcance/login.xhtml" class="btn-nav">Área Pacientes</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero" id="inicio">
+        <h1>Psicología a tu Alcance</h1>
+        <p>Transformando vidas a través de la salud mental. Tu bienestar es el motor que nos impulsa a seguir creciendo.
+        </p>
+        <button class="btn-cta">Contáctanos</button>
+    </header>
+
+    <!-- Servicios -->
+    <section id="servicios">
+        <div class="section-title">
+            <h2>Nuestros Servicios</h2>
+            <p>Ofrecemos un enfoque integral para tu bienestar mental, adaptado a tus necesidades específicas.</p>
+        </div>
+        <div class="services-grid">
+            <div class="card">
+                <h3>Terapia Individual</h3>
+                <p>Sesiones personalizadas para abordar ansiedad, depresión, estrés y crecimiento personal.</p>
+            </div>
+            <div class="card">
+                <h3>Terapia de Pareja</h3>
+                <p>Espacio seguro para mejorar la comunicación y fortalecer el vínculo afectivo.</p>
+            </div>
+            <div class="card">
+                <h3>Consulta Online</h3>
+                <p>Accede a terapia profesional desde la comodidad de tu hogar, con total privacidad.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Beneficios / Por qué elegirnos -->
+    <section id="nosotros">
+        <div class="section-title">
+            <h2>¿Por qué elegir Psicología a tu Alcance?</h2>
+            <p>Entendemos que dar el primer paso no es fácil. Por eso, hemos creado un entorno donde la empatía y la
+                excelencia profesional se unen para acompañarte.</p>
+        </div>
+        <div class="benefits-grid">
+            <div class="benefit-item">
+                <h3>100% Confidencial</h3>
+                <p>Tu privacidad es sagrada.</p>
+            </div>
+            <div class="benefit-item">
+                <h3>Profesionales Certificados</h3>
+                <p>Todos nuestros especialistas cuentan con colegiatura y amplia experiencia clínica.</p>
+            </div>
+            <div class="benefit-item">
+                <h3>Horarios Flexibles</h3>
+                <p>Agenda tu cita en el momento que mejor se adapte a tu rutina, incluyendo fines de semana.</p>
+            </div>
+            <div class="benefit-item">
+                <h3>Plataforma Segura</h3>
+                <p>Tus datos y sesiones están protegidos con los más altos estándares de seguridad.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Equipo -->
+    <section id="equipo">
+        <div class="section-title">
+            <h2>Conoce a nuestro equipo</h2>
+        </div>
+        <div class="team-placeholder">
+            [Espacio para fotos del equipo]
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-col">
+                <h4>Enlaces</h4>
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#servicios">Servicios</a></li>
+                    <li><a href="#nosotros">Nosotros</a></li>
+                    <li><a href="http://localhost:8080/psicologia-a-tu-alcance/login.xhtml">Área Pacientes</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contacto</h4>
+                <ul>
+                    <li>Email: contacto@psicologia.com</li>
+                    <li>Tel: +51 999 999 999</li>
+                    <li>Ubicación: Lima, Perú</li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Legales</h4>
+                <ul>
+                    <li><a href="#">Privacidad</a></li>
+                    <li><a href="#">Términos</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>© 2025 Psicología a tu Alcance. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>
