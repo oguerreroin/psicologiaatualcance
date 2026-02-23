@@ -1,0 +1,33 @@
+name: Test SSH Connection
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: # Permite ejecutarlo manualmente desde GitHub
+
+jobs:
+  test-connection:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Probando conexión SSH al VPS
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.VPS_IP }}
+        username: ${{ secrets.VPS_USER }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        script: |
+          echo "🚀 ¡Conexión exitosa desde GitHub Actions!"
+          echo "La IP del servidor donde estoy conectado es:"
+          curl -s ifconfig.me
+          echo -e "\n"
+          
+          echo "Creando un archivo de prueba en el directorio del usuario..."
+          touch ~/github_action_hello.txt
+          echo "Hola desde GitHub en la fecha $(date)" > ~/github_action_hello.txt
+          
+          echo "Verificando que el archivo existe:"
+          ls -l ~/github_action_hello.txt
+          cat ~/github_action_hello.txt
+          
+          echo "✅ Test Completado"
