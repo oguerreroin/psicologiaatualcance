@@ -16,6 +16,7 @@ jobs:
         host: ${{ secrets.VPS_IP }}
         username: ${{ secrets.VPS_USER }}
         key: ${{ secrets.VPS_SSH_KEY }}
+        port: 22
         script: |
           echo "🚀 ¡Conexión exitosa desde GitHub Actions!"
           echo "La IP del servidor donde estoy conectado es:"
